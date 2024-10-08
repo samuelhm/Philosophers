@@ -6,7 +6,7 @@
 #    By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/11 13:53:02 by linyao            #+#    #+#              #
-#    Updated: 2024/10/08 13:45:42 by shurtado         ###   ########.fr        #
+#    Updated: 2024/10/08 20:00:01 by shurtado         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,6 +56,7 @@ $(OBJ_DIR):
 
 #Call libft Makefile
 libft:
+	@git submodule update --init --recursive
 	@$(MAKE) --silent --no-print-directory -C $(LIBFT_DIR)
 
 # Utils
