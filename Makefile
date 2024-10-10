@@ -6,7 +6,7 @@
 #    By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/11 13:53:02 by linyao            #+#    #+#              #
-#    Updated: 2024/10/09 18:49:34 by shurtado         ###   ########.fr        #
+#    Updated: 2024/10/10 20:05:38 by shurtado         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ OBJ_DIR = obj
 INC_DIR = inc
 
 # Source + obj
-SRCS_FILES = philo.c checks.c
+SRCS_FILES = philo.c checks.c actions.c
 SRCS = $(addprefix $(SRC_DIR)/,$(SRCS_FILES))
 
 OBJS = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS))
