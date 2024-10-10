@@ -6,7 +6,7 @@
 #    By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/11 13:53:02 by linyao            #+#    #+#              #
-#    Updated: 2024/10/08 20:40:40 by shurtado         ###   ########.fr        #
+#    Updated: 2024/10/09 18:49:34 by shurtado         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,14 +16,14 @@ TARGET = philo
 CFLAGS = -Wall -Wextra -Werror -I$(INC_DIR)
 
 # Debug
-#CFLAGS += -g -O0
+CFLAGS += -g -O0
 # Directory
 SRC_DIR = src
 OBJ_DIR = obj
 INC_DIR = inc
 
 # Source + obj
-SRCS_FILES = philo.c
+SRCS_FILES = philo.c checks.c
 SRCS = $(addprefix $(SRC_DIR)/,$(SRCS_FILES))
 
 OBJS = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS))
