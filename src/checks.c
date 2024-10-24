@@ -6,7 +6,7 @@
 /*   By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 16:15:26 by shurtado          #+#    #+#             */
-/*   Updated: 2024/10/10 20:22:29 by shurtado         ###   ########.fr       */
+/*   Updated: 2024/10/24 14:57:31 by shurtado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,19 +45,19 @@ static int	ft_atoi(const char *str)
 static void	init_philosophers(t_table *table, int count)
 {
 	int		i;
-	t_philo	*phil;
 
 	i = -1;
-	while (i++ < count)
+	while (++i < count)
 	{
-		phil = &table->philos[i];
-		pthread_create(&phil->philo_thrd, NULL, routine, phil);
-		phil[i].right_fork = NULL;
-		pthread_mutex_init(&phil[i].fork, NULL);
-		phil[i].table = table;
-		phil[i].name = i;
-		phil[i].meals = 0;
-		phil[i].alive = true;
+		table->philos[i] = malloc(sizeof(t_philo));
+		table->philos[i]->fork = false;
+		table->philos[i]->right_fork = NULL;
+		pthread_mutex_init(&table->philos[i]->mutex, NULL);
+		table->philos[i]->table = table;
+		table->philos[i]->name = i;
+		table->philos[i]->meals = 0;
+		table->philos[i]->alive = true;
+		table->philos[i]->last_meal = -1;
 	}
 }
 
@@ -80,7 +80,8 @@ bool	check_init_args(int argc, char **argv, t_table *table)
 	if (!(table->tto_sleep > 0 && table->tto_eat > 0 && table->tto_die > 0 \
 		&& num > 0))
 		return (false);
-	table->philos = malloc((num) * sizeof(t_philo));
+	table->philos = malloc((num + 1) * sizeof(t_philo *));
+	table->philos[num] = NULL;
 	if (!table->philos)
 		return (false);
 	init_philosophers(table, num);

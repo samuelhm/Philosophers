@@ -6,7 +6,7 @@
 /*   By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 19:41:34 by shurtado          #+#    #+#             */
-/*   Updated: 2024/10/10 20:31:47 by shurtado         ###   ########.fr       */
+/*   Updated: 2024/10/11 18:41:14 by shurtado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,30 +22,35 @@ static long long	current_timestamp(void)
 	return (milliseconds);
 }
 
-void	philo_sleep(int ms, int phil_num)
+void	philo_sleep(t_philo *philo)
 {
-	long long	time;
-
-	time = current_timestamp();
-	printf ("%d %d is sleeping\n", time, phil_num);
-	usleep(ms);
+	printf ("%lld %d is sleeping\n", current_timestamp(), philo->name);
+	usleep(philo->table->tto_sleep);
 }
 
-void	philo_eat(int ms, pthread_mutex_t *mutex, int phil_num, \
-					pthread_mutex_t *mutex2)
+void	philo_eat(t_philo *philo)
 {
-	long long	time;
-
-	pthread_mutex_lock(mutex);
-	pthread_mutex_lock(mutex2);
-	time = current_timestamp();
-	printf ("%d %d is eating\n", time, phil_num);
-	usleep(ms);
-	pthread_mutex_unlock(mutex);
-	pthread_mutex_unlock(mutex2);
+	pthread_mutex_lock(&philo->mutex);
+	philo->fork = false;
+	philo->right_fork = false;
+	pthread_mutex_unlock(&philo->mutex);
+	printf ("%lld %d is eating\n", current_timestamp(), philo->name);
+	usleep(philo->table->tto_eat);
 }
 
-void	philo_think(int phil_num)
+bool	philo_think(t_philo *philo)
 {
-	printf ("%d %d is thinking\n", time, phil_num);
+	printf ("%lld %d is thinking\n", current_timestamp(), philo->name);
+	while (1)
+	{
+		if ((current_timestamp() - philo->last_meal) > philo->table->tto_die)
+		{
+			printf("%lld %d died\n", current_timestamp(), philo->name);
+			philo->alive = false;
+			return (false);
+		}
+		if (philo->fork && philo->right_fork)
+			break ;
+	}
+	return (true);
 }
