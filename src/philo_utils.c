@@ -6,11 +6,13 @@
 /*   By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 15:34:14 by shurtado          #+#    #+#             */
-/*   Updated: 2024/10/24 20:45:18 by shurtado         ###   ########.fr       */
+/*   Updated: 2024/10/25 00:34:08 by shurtado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+#define WAIT 5
 
 void	set_forks(t_table *table)
 {
@@ -41,7 +43,10 @@ void	start_threads(t_table *table)
 
 static void	kill(t_table *table, int i)
 {
-	printf("%lld %d died\n", current_timestamp(), i);
+
+	if (table->each_eat != table->philos[i]->meals)
+		printf("%lld %d died\n", current_timestamp() - table->reset_time, i);
+	pthread_mutex_unlock(&table->philos[i]->last_m);
 	pthread_mutex_lock(&table->stop_m);
 	table->stop = true;
 	pthread_mutex_unlock(&table->stop_m);
@@ -49,7 +54,8 @@ static void	kill(t_table *table, int i)
 
 void	philo_killer(t_table *table)
 {
-	int		i;
+	int			i;
+	long long	time_now;
 
 	while (1)
 	{
@@ -60,11 +66,11 @@ void	philo_killer(t_table *table)
 			if (!table->stop)
 			{
 				pthread_mutex_unlock(&table->stop_m);
+				time_now = current_timestamp();
 				pthread_mutex_lock(&table->philos[i]->last_m);
-				if (current_timestamp() - table->philos[i]->last_meal \
-					>= table->tto_die)
+				if (time_now - table->philos[i]->last_meal \
+					> table->tto_die + WAIT)
 				{
-					pthread_mutex_unlock(&table->philos[i]->last_m);
 					kill(table, i);
 					break ;
 				}
@@ -72,7 +78,11 @@ void	philo_killer(t_table *table)
 					pthread_mutex_unlock(&table->philos[i]->last_m);
 			}
 			else
+			{
 				pthread_mutex_unlock(&table->stop_m);
+				return ;
+			}
 		}
+		usleep(WAIT);
 	}
 }

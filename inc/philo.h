@@ -6,7 +6,7 @@
 /*   By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 13:47:41 by shurtado          #+#    #+#             */
-/*   Updated: 2024/10/24 20:26:04 by shurtado         ###   ########.fr       */
+/*   Updated: 2024/10/25 00:23:00 by shurtado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef struct s_table
 	int				each_eat;
 	pthread_mutex_t	stop_m;
 	bool			stop;
+	long long		reset_time;
 }	t_table;
 
 typedef struct s_philo

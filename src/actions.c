@@ -6,7 +6,7 @@
 /*   By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 19:41:34 by shurtado          #+#    #+#             */
-/*   Updated: 2024/10/24 20:35:30 by shurtado         ###   ########.fr       */
+/*   Updated: 2024/10/25 00:24:28 by shurtado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,16 @@ long long	current_timestamp(void)
 
 void	philo_sleep(t_philo *philo)
 {
-	printf ("%lld %d is sleeping\n", current_timestamp(), philo->name);
+	pthread_mutex_lock(&philo->table->stop_m);
+	if (!philo->table->stop)
+		printf ("%lld %d is sleeping\n", current_timestamp() - philo->table->reset_time, philo->name);
+	pthread_mutex_unlock(&philo->table->stop_m);
 	usleep(philo->table->tto_sleep * 1000);
 }
 
 void	philo_eat(t_philo *philo)
 {
-	if (philo->name % 2 == 0)
+	if (&philo->fork < philo->right_fork)
 	{
 		pthread_mutex_lock(&philo->fork);
 		pthread_mutex_lock(philo->right_fork);
@@ -40,17 +43,19 @@ void	philo_eat(t_philo *philo)
 		pthread_mutex_lock(philo->right_fork);
 		pthread_mutex_lock(&philo->fork);
 	}
-	printf ("%lld %d is eating\n", current_timestamp(), philo->name);
+	pthread_mutex_lock(&philo->table->stop_m);
+	if (!philo->table->stop)
+		printf ("%lld %d is eating\n", current_timestamp() - philo->table->reset_time, philo->name);
+	pthread_mutex_unlock(&philo->table->stop_m);
 	usleep(philo->table->tto_eat * 1000);
 	pthread_mutex_unlock(&philo->fork);
 	pthread_mutex_unlock(philo->right_fork);
-	pthread_mutex_lock(&philo->last_m);
-	philo->meals++;
-	philo->last_meal = current_timestamp();
-	pthread_mutex_unlock(&philo->last_m);
 }
 
 void	philo_think(t_philo *philo)
 {
-	printf ("%lld %d is thinking\n", current_timestamp(), philo->name);
+	pthread_mutex_lock(&philo->table->stop_m);
+	if (!philo->table->stop)
+		printf ("%lld %d is thinking\n", current_timestamp() - philo->table->reset_time, philo->name);
+	pthread_mutex_unlock(&philo->table->stop_m);
 }
