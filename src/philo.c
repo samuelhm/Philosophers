@@ -6,7 +6,7 @@
 /*   By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 13:46:41 by shurtado          #+#    #+#             */
-/*   Updated: 2024/10/24 16:31:03 by shurtado         ###   ########.fr       */
+/*   Updated: 2024/10/24 18:00:20 by shurtado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,23 @@
 void	*routine(void *arg)
 {
 	t_philo	*philo;
+	bool	alive;
 
 	philo = (t_philo *) arg;
-	while (philo->alive)
+	pthread_mutex_lock(&philo->alive_m);
+	alive = philo->alive;
+	pthread_mutex_unlock(&philo->alive_m);
+	while (alive)
 	{
 		philo_eat(philo);
 		philo->meals++;
 		if (philo->meals == philo->table->each_eat || !philo->alive)
 			break ;
 		philo_sleep(philo);
-		if (philo->alive)
-			philo_think(philo);
+		philo_think(philo);
+		pthread_mutex_lock(&philo->alive_m);
+		alive = philo->alive;
+		pthread_mutex_unlock(&philo->alive_m);
 	}
 	return (NULL);
 }
@@ -68,6 +74,7 @@ int	main(int argc, char *argv[])
 		return (1);
 	}
 	start_threads(&table);
+	philo_killer(&table);
 	free_table(&table);
 	return (0);
 }

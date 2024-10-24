@@ -6,7 +6,7 @@
 /*   By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 13:47:41 by shurtado          #+#    #+#             */
-/*   Updated: 2024/10/24 16:24:13 by shurtado         ###   ########.fr       */
+/*   Updated: 2024/10/24 18:06:40 by shurtado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ typedef struct s_philo	t_philo;
 typedef struct s_table
 {
 	t_philo		**philos;
-	int			tto_die;
+	long long	tto_die;
 	int			tto_eat;
 	int			tto_sleep;
 	int			each_eat;
@@ -42,19 +42,21 @@ typedef struct s_philo
 	int				name;
 	int				meals;
 	bool			alive;
+	pthread_mutex_t	alive_m;
 	long long		last_meal;
 }	t_philo;
 
 //Main_Functions
-bool	check_init_args(int argc, char **argv, t_table *table);
-void	set_forks(t_table *table);
-void	*routine(void *arg);
-void	start_threads(t_table *table);
+bool		check_init_args(int argc, char **argv, t_table *table);
+void		set_forks(t_table *table);
+void		*routine(void *arg);
+void		start_threads(t_table *table);
 long long	current_timestamp(void);
+void		philo_killer(t_table *table);
 
 //Philo Actions
-void	philo_think(t_philo *philo);
-void	philo_sleep(t_philo *philo);
-void	philo_eat(t_philo *philo);
+void		philo_think(t_philo *philo);
+void		philo_sleep(t_philo *philo);
+void		philo_eat(t_philo *philo);
 
 #endif

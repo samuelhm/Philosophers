@@ -6,7 +6,7 @@
 /*   By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 15:34:14 by shurtado          #+#    #+#             */
-/*   Updated: 2024/10/24 16:32:15 by shurtado         ###   ########.fr       */
+/*   Updated: 2024/10/24 18:16:02 by shurtado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,18 @@ void	start_threads(t_table *table)
 	i = -1;
 	while (table->philos[++i])
 	{
-		pthread_create(&table->philos[i], NULL, routine, table->philos[i]);
+		pthread_create(&table->philos[i]->philo_thrd, NULL, \
+						routine, table->philos[i]);
+		table->philos[i]->last_meal = current_timestamp();
 	}
+}
+
+static void	kill(t_table *table, int i)
+{
+	printf("%lld %d died\n", current_timestamp(), i);
+	pthread_mutex_lock(&table->philos[i]->alive_m);
+	table->philos[i]->alive = false;
+	pthread_mutex_unlock(&table->philos[i]->alive_m);
 }
 
 void	philo_killer(t_table *table)
@@ -43,7 +53,6 @@ void	philo_killer(t_table *table)
 	bool	one_alive;
 
 	one_alive = true;
-
 	while (one_alive)
 	{
 		one_alive = false;
@@ -54,12 +63,10 @@ void	philo_killer(t_table *table)
 			{
 				if (current_timestamp() - table->philos[i]->last_meal \
 					>= table->tto_die)
-					table->philos[i]->alive = false;
+					kill(table, i);
 				else
 					one_alive = true;
 			}
 		}
-		if (!one_alive)
-			break ;
 	}
 }
