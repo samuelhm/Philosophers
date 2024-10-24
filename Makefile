@@ -6,7 +6,7 @@
 #    By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/11 13:53:02 by linyao            #+#    #+#              #
-#    Updated: 2024/10/24 17:56:27 by shurtado         ###   ########.fr        #
+#    Updated: 2024/10/24 20:42:34 by shurtado         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ TARGET = philo
 CFLAGS = -Wall -Wextra -Werror -I$(INC_DIR)
 
 # Debug
-#CFLAGS += -g -O0 -fsanitize=thread
+CFLAGS += -g -O0 #-fsanitize=thread
 # Directory
 SRC_DIR = src
 OBJ_DIR = obj

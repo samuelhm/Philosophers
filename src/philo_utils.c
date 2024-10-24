@@ -6,7 +6,7 @@
 /*   By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 15:34:14 by shurtado          #+#    #+#             */
-/*   Updated: 2024/10/24 18:16:02 by shurtado         ###   ########.fr       */
+/*   Updated: 2024/10/24 20:45:18 by shurtado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,31 +42,37 @@ void	start_threads(t_table *table)
 static void	kill(t_table *table, int i)
 {
 	printf("%lld %d died\n", current_timestamp(), i);
-	pthread_mutex_lock(&table->philos[i]->alive_m);
-	table->philos[i]->alive = false;
-	pthread_mutex_unlock(&table->philos[i]->alive_m);
+	pthread_mutex_lock(&table->stop_m);
+	table->stop = true;
+	pthread_mutex_unlock(&table->stop_m);
 }
 
 void	philo_killer(t_table *table)
 {
 	int		i;
-	bool	one_alive;
 
-	one_alive = true;
-	while (one_alive)
+	while (1)
 	{
-		one_alive = false;
 		i = -1;
 		while (table->philos[++i])
 		{
-			if (table->philos[i]->alive)
+			pthread_mutex_lock(&table->stop_m);
+			if (!table->stop)
 			{
+				pthread_mutex_unlock(&table->stop_m);
+				pthread_mutex_lock(&table->philos[i]->last_m);
 				if (current_timestamp() - table->philos[i]->last_meal \
 					>= table->tto_die)
+				{
+					pthread_mutex_unlock(&table->philos[i]->last_m);
 					kill(table, i);
+					break ;
+				}
 				else
-					one_alive = true;
+					pthread_mutex_unlock(&table->philos[i]->last_m);
 			}
+			else
+				pthread_mutex_unlock(&table->stop_m);
 		}
 	}
 }

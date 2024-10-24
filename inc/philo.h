@@ -6,7 +6,7 @@
 /*   By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 13:47:41 by shurtado          #+#    #+#             */
-/*   Updated: 2024/10/24 18:06:40 by shurtado         ###   ########.fr       */
+/*   Updated: 2024/10/24 20:26:04 by shurtado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,13 @@ typedef struct s_philo	t_philo;
 
 typedef struct s_table
 {
-	t_philo		**philos;
-	long long	tto_die;
-	int			tto_eat;
-	int			tto_sleep;
-	int			each_eat;
+	t_philo			**philos;
+	long long		tto_die;
+	int				tto_eat;
+	int				tto_sleep;
+	int				each_eat;
+	pthread_mutex_t	stop_m;
+	bool			stop;
 }	t_table;
 
 typedef struct s_philo
@@ -41,8 +43,7 @@ typedef struct s_philo
 	pthread_mutex_t	fork;
 	int				name;
 	int				meals;
-	bool			alive;
-	pthread_mutex_t	alive_m;
+	pthread_mutex_t	last_m;
 	long long		last_meal;
 }	t_philo;
 

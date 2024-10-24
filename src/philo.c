@@ -6,35 +6,48 @@
 /*   By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 13:46:41 by shurtado          #+#    #+#             */
-/*   Updated: 2024/10/24 18:00:20 by shurtado         ###   ########.fr       */
+/*   Updated: 2024/10/24 20:45:47 by shurtado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
 /*number_of_philosophers time_to_die time_to_eat time_to_sleep
-[number_of_times_each_philosopher_must_eat]*/
+[number_of_times_each_philosopher_must_eat] valgrid --tool=helgrind  */
 
 void	*routine(void *arg)
 {
 	t_philo	*philo;
-	bool	alive;
 
 	philo = (t_philo *) arg;
-	pthread_mutex_lock(&philo->alive_m);
-	alive = philo->alive;
-	pthread_mutex_unlock(&philo->alive_m);
-	while (alive)
+	while (1)
 	{
-		philo_eat(philo);
-		philo->meals++;
-		if (philo->meals == philo->table->each_eat || !philo->alive)
+		printf("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiii\n");
+		pthread_mutex_lock(&philo->table->stop_m);
+		if (philo->table->stop)
+		{
+			pthread_mutex_unlock(&philo->table->stop_m);
+			return (NULL);
+		}
+		else
+		{
+			pthread_mutex_lock(&philo->table->stop_m);
+			philo_eat(philo);
+		}
+		if (philo->meals == philo->table->each_eat)
 			break ;
-		philo_sleep(philo);
+		pthread_mutex_lock(&philo->table->stop_m);
+		if (philo->table->stop)
+		{
+			pthread_mutex_unlock(&philo->table->stop_m);
+			return (NULL);
+		}
+		else
+		{
+			pthread_mutex_unlock(&philo->table->stop_m);
+			philo_sleep(philo);
+		}
 		philo_think(philo);
-		pthread_mutex_lock(&philo->alive_m);
-		alive = philo->alive;
-		pthread_mutex_unlock(&philo->alive_m);
 	}
 	return (NULL);
 }
@@ -46,6 +59,8 @@ static void	init_table(t_table *table)
 	table->tto_eat = 0;
 	table->tto_sleep = 0;
 	table->philos = NULL;
+	table->stop = false;
+	pthread_mutex_init(&table->stop_m, NULL);
 }
 
 static void	free_table(t_table *table)
@@ -73,8 +88,11 @@ int	main(int argc, char *argv[])
 			free(table.philos);
 		return (1);
 	}
+	printf("startthreads\n");
 	start_threads(&table);
+	printf("killer\n");
 	philo_killer(&table);
+	printf("free\n");
 	free_table(&table);
 	return (0);
 }

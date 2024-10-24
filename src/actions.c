@@ -6,7 +6,7 @@
 /*   By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 19:41:34 by shurtado          #+#    #+#             */
-/*   Updated: 2024/10/24 18:14:44 by shurtado         ###   ########.fr       */
+/*   Updated: 2024/10/24 20:35:30 by shurtado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,12 @@ void	philo_eat(t_philo *philo)
 	}
 	printf ("%lld %d is eating\n", current_timestamp(), philo->name);
 	usleep(philo->table->tto_eat * 1000);
-	philo->last_meal = current_timestamp();
 	pthread_mutex_unlock(&philo->fork);
 	pthread_mutex_unlock(philo->right_fork);
+	pthread_mutex_lock(&philo->last_m);
+	philo->meals++;
+	philo->last_meal = current_timestamp();
+	pthread_mutex_unlock(&philo->last_m);
 }
 
 void	philo_think(t_philo *philo)

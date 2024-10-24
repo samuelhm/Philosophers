@@ -6,7 +6,7 @@
 /*   By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 16:15:26 by shurtado          #+#    #+#             */
-/*   Updated: 2024/10/24 18:15:20 by shurtado         ###   ########.fr       */
+/*   Updated: 2024/10/24 20:30:25 by shurtado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,11 +51,11 @@ static void	init_philosophers(t_table *table, int count)
 	{
 		table->philos[i] = malloc(sizeof(t_philo));
 		pthread_mutex_init(&table->philos[i]->fork, NULL);
+		pthread_mutex_init(&table->philos[i]->last_m, NULL);
 		table->philos[i]->right_fork = NULL;
 		table->philos[i]->table = table;
 		table->philos[i]->name = i;
 		table->philos[i]->meals = 0;
-		table->philos[i]->alive = true;
 		table->philos[i]->last_meal = -1;
 	}
 	set_forks(table);
