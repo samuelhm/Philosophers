@@ -6,7 +6,7 @@
 /*   By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 13:46:41 by shurtado          #+#    #+#             */
-/*   Updated: 2024/10/24 14:59:31 by shurtado         ###   ########.fr       */
+/*   Updated: 2024/10/24 16:31:03 by shurtado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,17 @@ void	*routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *) arg;
-	while (philo->meals < philo->table->each_eat && philo->alive)
+	while (philo->alive)
 	{
 		philo_eat(philo);
 		philo->meals++;
-		philo_sleep(philo);
-		if (!philo_think(philo))
+		if (philo->meals == philo->table->each_eat || !philo->alive)
 			break ;
+		philo_sleep(philo);
+		if (philo->alive)
+			philo_think(philo);
 	}
-	return (arg);
+	return (NULL);
 }
 
 static void	init_table(t_table *table)
@@ -65,6 +67,7 @@ int	main(int argc, char *argv[])
 			free(table.philos);
 		return (1);
 	}
+	start_threads(&table);
 	free_table(&table);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 13:47:41 by shurtado          #+#    #+#             */
-/*   Updated: 2024/10/24 14:04:04 by shurtado         ###   ########.fr       */
+/*   Updated: 2024/10/24 16:24:13 by shurtado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,8 @@ typedef struct s_philo
 {
 	t_table			*table;
 	pthread_t		philo_thrd;
-	pthread_mutex_t	mutex;
-	bool			*right_fork;
-	bool			fork;
+	pthread_mutex_t	*right_fork;
+	pthread_mutex_t	fork;
 	int				name;
 	int				meals;
 	bool			alive;
@@ -48,10 +47,13 @@ typedef struct s_philo
 
 //Main_Functions
 bool	check_init_args(int argc, char **argv, t_table *table);
+void	set_forks(t_table *table);
 void	*routine(void *arg);
+void	start_threads(t_table *table);
+long long	current_timestamp(void);
 
 //Philo Actions
-bool	philo_think(t_philo *philo);
+void	philo_think(t_philo *philo);
 void	philo_sleep(t_philo *philo);
 void	philo_eat(t_philo *philo);
 
