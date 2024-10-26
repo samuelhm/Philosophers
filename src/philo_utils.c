@@ -6,13 +6,13 @@
 /*   By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 15:34:14 by shurtado          #+#    #+#             */
-/*   Updated: 2024/10/25 00:34:08 by shurtado         ###   ########.fr       */
+/*   Updated: 2024/10/26 15:33:53 by shurtado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-#define WAIT 5
+#define HW_TOLERANCE 10
 
 void	set_forks(t_table *table)
 {
@@ -43,18 +43,24 @@ void	start_threads(t_table *table)
 
 static void	kill(t_table *table, int i)
 {
-
 	if (table->each_eat != table->philos[i]->meals)
-		printf("%lld %d died\n", current_timestamp() - table->reset_time, i);
+		printf("%lld %d died\n", current_timestamp() \
+				- table->reset_time, i);
 	pthread_mutex_unlock(&table->philos[i]->last_m);
 	pthread_mutex_lock(&table->stop_m);
 	table->stop = true;
 	pthread_mutex_unlock(&table->stop_m);
 }
 
-void	philo_killer(t_table *table)
+static void	unlock_and_gettime(t_table *table, long long *time_now, int i)
 {
-	int			i;
+	pthread_mutex_unlock(&table->stop_m);
+	*time_now = current_timestamp();
+	pthread_mutex_lock(&table->philos[i]->last_m);
+}
+
+int	philo_killer(t_table *table, int i)
+{
 	long long	time_now;
 
 	while (1)
@@ -65,24 +71,18 @@ void	philo_killer(t_table *table)
 			pthread_mutex_lock(&table->stop_m);
 			if (!table->stop)
 			{
-				pthread_mutex_unlock(&table->stop_m);
-				time_now = current_timestamp();
-				pthread_mutex_lock(&table->philos[i]->last_m);
-				if (time_now - table->philos[i]->last_meal \
-					> table->tto_die + WAIT)
+				unlock_and_gettime(table, &time_now, i);
+				if (time_now - table->philos[i]->last_meal > \
+					table->tto_die + HW_TOLERANCE)
 				{
 					kill(table, i);
 					break ;
 				}
-				else
-					pthread_mutex_unlock(&table->philos[i]->last_m);
 			}
 			else
-			{
-				pthread_mutex_unlock(&table->stop_m);
-				return ;
-			}
+				return (pthread_mutex_unlock(&table->stop_m));
+			pthread_mutex_unlock(&table->philos[i]->last_m);
 		}
-		usleep(WAIT);
+		usleep(HW_TOLERANCE);
 	}
 }

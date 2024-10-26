@@ -6,7 +6,7 @@
 /*   By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 19:41:34 by shurtado          #+#    #+#             */
-/*   Updated: 2024/10/25 00:24:28 by shurtado         ###   ########.fr       */
+/*   Updated: 2024/10/26 15:23:00 by shurtado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ void	philo_sleep(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->table->stop_m);
 	if (!philo->table->stop)
-		printf ("%lld %d is sleeping\n", current_timestamp() - philo->table->reset_time, philo->name);
+		printf ("%lld %d is sleeping\n", current_timestamp() - \
+				philo->table->reset_time, philo->name);
 	pthread_mutex_unlock(&philo->table->stop_m);
 	usleep(philo->table->tto_sleep * 1000);
 }
@@ -45,7 +46,8 @@ void	philo_eat(t_philo *philo)
 	}
 	pthread_mutex_lock(&philo->table->stop_m);
 	if (!philo->table->stop)
-		printf ("%lld %d is eating\n", current_timestamp() - philo->table->reset_time, philo->name);
+		printf ("%lld %d is eating\n", current_timestamp() - \
+				philo->table->reset_time, philo->name);
 	pthread_mutex_unlock(&philo->table->stop_m);
 	usleep(philo->table->tto_eat * 1000);
 	pthread_mutex_unlock(&philo->fork);
@@ -56,6 +58,7 @@ void	philo_think(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->table->stop_m);
 	if (!philo->table->stop)
-		printf ("%lld %d is thinking\n", current_timestamp() - philo->table->reset_time, philo->name);
+		printf ("%lld %d is thinking\n", current_timestamp() - \
+				philo->table->reset_time, philo->name);
 	pthread_mutex_unlock(&philo->table->stop_m);
 }

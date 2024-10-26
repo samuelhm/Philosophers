@@ -6,7 +6,7 @@
 /*   By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 13:46:41 by shurtado          #+#    #+#             */
-/*   Updated: 2024/10/25 00:23:15 by shurtado         ###   ########.fr       */
+/*   Updated: 2024/10/26 15:23:56 by shurtado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ int	main(int argc, char *argv[])
 {
 	t_table	table;
 
-
 	init_table(&table);
 	if (!check_init_args(argc, argv, &table))
 	{
@@ -81,8 +80,7 @@ int	main(int argc, char *argv[])
 		return (1);
 	}
 	start_threads(&table);
-	philo_killer(&table);
+	philo_killer(&table, -1);
 	free_table(&table);
 	return (0);
 }
-
