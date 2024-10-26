@@ -4,6 +4,8 @@
 *.DS_Store
 .vscode/
 .vscode
+/philo
+!philo/
 # Prerequisites
 *.d
 
