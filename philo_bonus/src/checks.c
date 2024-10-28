@@ -6,11 +6,12 @@
 /*   By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 16:15:26 by shurtado          #+#    #+#             */
-/*   Updated: 2024/10/28 02:33:52 by shurtado         ###   ########.fr       */
+/*   Updated: 2024/10/28 12:00:54 by shurtado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+#include <fcntl.h>
 
 static int	ft_isdigit(int c)
 {
@@ -46,19 +47,23 @@ static void	init_philosophers(t_table *table, int count)
 {
 	int		i;
 
+	sem_unlink("/stop_sem");
+	table->stop_sem = sem_open("/stop_sem", O_CREAT, 0644, 1);
+	sem_unlink("/forks");
+	table->forks = sem_open("/forks", O_CREAT, 0644, count);
+	sem_unlink("/take_forks_sem");
+	table->take_forks_sem = sem_open("/take_forks_sem", O_CREAT, 0644, 1);
 	i = -1;
 	while (++i < count)
 	{
 		table->philos[i] = malloc(sizeof(t_philo));
-		pthread_mutex_init(&table->philos[i]->fork, NULL);
-		pthread_mutex_init(&table->philos[i]->last_m, NULL);
-		table->philos[i]->right_fork = NULL;
+		table->philos[i]->last_meal_sem = sem_open("/last_meal", \
+												O_CREAT, 0644, 1);
 		table->philos[i]->table = table;
 		table->philos[i]->name = i;
 		table->philos[i]->meals = 0;
 		table->philos[i]->last_meal = -1;
 	}
-	set_forks(table);
 }
 
 static bool	check_digits(int argc, char **argv)

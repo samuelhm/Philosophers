@@ -6,17 +6,17 @@
 #    By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/11 13:53:02 by linyao            #+#    #+#              #
-#    Updated: 2024/10/28 02:31:30 by shurtado         ###   ########.fr        #
+#    Updated: 2024/10/28 12:12:16 by shurtado         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 #Config
 CC = gcc
-TARGET = philo
+TARGET = philo_bonus
 CFLAGS = -Wall -Wextra -Werror -I$(INC_DIR)
 
 # Debug
-CFLAGS += -g -O1 #-fsanitize=thread
+CFLAGS += -g -O1 -fsanitize=thread -pthread
 # Directory
 SRC_DIR = src
 OBJ_DIR = obj

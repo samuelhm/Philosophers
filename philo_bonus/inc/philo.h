@@ -6,7 +6,7 @@
 /*   By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 13:47:41 by shurtado          #+#    #+#             */
-/*   Updated: 2024/10/28 02:01:23 by shurtado         ###   ########.fr       */
+/*   Updated: 2024/10/28 11:33:15 by shurtado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <stdlib.h>
 # include <sys/time.h>
 # include <stdbool.h>
+# include <semaphore.h>
 
 typedef struct s_philo	t_philo;
 
@@ -30,7 +31,9 @@ typedef struct s_table
 	int				tto_eat;
 	int				tto_sleep;
 	int				each_eat;
-	pthread_mutex_t	stop_m;
+	sem_t			*take_forks_sem;
+	sem_t			*forks;
+	sem_t			*stop_sem;
 	bool			stop;
 	long long		reset_time;
 }	t_table;
@@ -39,17 +42,14 @@ typedef struct s_philo
 {
 	t_table			*table;
 	pthread_t		philo_thrd;
-	pthread_mutex_t	*right_fork;
-	pthread_mutex_t	fork;
 	int				name;
 	int				meals;
-	pthread_mutex_t	last_m;
+	sem_t			*last_meal_sem;
 	long long		last_meal;
 }	t_philo;
 
 //Main_Functions
 bool		check_init_args(int argc, char **argv, t_table *table);
-void		set_forks(t_table *table);
 void		*routine(void *arg);
 void		start_threads(t_table *table);
 long long	current_timestamp(void);

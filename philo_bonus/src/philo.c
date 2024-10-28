@@ -6,7 +6,7 @@
 /*   By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 13:46:41 by shurtado          #+#    #+#             */
-/*   Updated: 2024/10/28 01:43:11 by shurtado         ###   ########.fr       */
+/*   Updated: 2024/10/28 12:12:52 by shurtado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,24 +20,24 @@ void	*routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *) arg;
-	if (philo->right_fork == &philo->fork)
+	if (philo->table->philos[1] == NULL)
 		return (NULL);
-	pthread_mutex_lock(&philo->table->stop_m);
+	sem_wait(philo->table->stop_sem);
 	while (!philo->table->stop)
 	{
-		pthread_mutex_unlock(&philo->table->stop_m);
+		sem_post(philo->table->stop_sem);
 		philo_eat(philo);
-		pthread_mutex_lock(&philo->last_m);
+		sem_wait(philo->last_meal_sem);
 		philo->meals++;
 		philo->last_meal = current_timestamp();
-		pthread_mutex_unlock(&philo->last_m);
+		sem_post(philo->last_meal_sem);
 		philo_sleep(philo);
 		philo_think(philo);
-		pthread_mutex_lock(&philo->table->stop_m);
+		sem_wait(philo->table->stop_sem);
 		if (philo->meals == philo->table->each_eat)
 			break ;
 	}
-	pthread_mutex_unlock(&philo->table->stop_m);
+	sem_post(philo->table->stop_sem);
 	return (NULL);
 }
 
@@ -50,7 +50,9 @@ static void	init_table(t_table *table)
 	table->philos = NULL;
 	table->stop = false;
 	table->reset_time = current_timestamp();
-	pthread_mutex_init(&table->stop_m, NULL);
+	table->forks = NULL;
+	table->stop_sem = NULL;
+	table->take_forks_sem = NULL;
 }
 
 static void	free_table(t_table *table)
@@ -63,11 +65,14 @@ static void	free_table(t_table *table)
 	i = -1;
 	while (table->philos[++i])
 	{
-		pthread_mutex_destroy(&table->philos[i]->fork);
-		pthread_mutex_destroy(&table->philos[i]->last_m);
+		sem_close(table->philos[i]->last_meal_sem);
+		sem_destroy(table->philos[i]->last_meal_sem);
 		free(table->philos[i]);
 	}
-	pthread_mutex_destroy(&table->stop_m);
+	sem_close(table->take_forks_sem);
+	sem_destroy(table->take_forks_sem);
+	sem_close(table->forks);
+	sem_destroy(table->forks);
 	free (table->philos);
 }
 

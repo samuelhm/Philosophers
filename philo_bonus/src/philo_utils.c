@@ -6,25 +6,11 @@
 /*   By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 15:34:14 by shurtado          #+#    #+#             */
-/*   Updated: 2024/10/28 01:34:59 by shurtado         ###   ########.fr       */
+/*   Updated: 2024/10/28 11:50:58 by shurtado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-void	set_forks(t_table *table)
-{
-	int	i;
-
-	i = -1;
-	while (table->philos[++i])
-	{
-		if (table->philos[i + 1])
-			table->philos[i]->right_fork = &table->philos[i + 1]->fork;
-		else
-			table->philos[i]->right_fork = &table->philos[0]->fork;
-	}
-}
 
 void	start_threads(t_table *table)
 {
@@ -36,6 +22,7 @@ void	start_threads(t_table *table)
 		pthread_create(&table->philos[i]->philo_thrd, NULL, \
 						routine, table->philos[i]);
 		table->philos[i]->last_meal = current_timestamp();
+		usleep (100);
 	}
 }
 
@@ -44,17 +31,17 @@ static void	kill(t_table *table, int i)
 	if (table->each_eat != table->philos[i]->meals)
 		printf("%lld %d died\n", current_timestamp() \
 				- table->reset_time, i);
-	pthread_mutex_unlock(&table->philos[i]->last_m);
-	pthread_mutex_lock(&table->stop_m);
+	sem_post(table->philos[i]->last_meal_sem);
+	sem_wait(table->stop_sem);
 	table->stop = true;
-	pthread_mutex_unlock(&table->stop_m);
+	sem_post(table->stop_sem);
 }
 
 static void	unlock_and_gettime(t_table *table, long long *time_now, int i)
 {
-	pthread_mutex_unlock(&table->stop_m);
+	sem_post(table->stop_sem);
 	*time_now = current_timestamp();
-	pthread_mutex_lock(&table->philos[i]->last_m);
+	sem_wait(table->philos[i]->last_meal_sem);
 }
 
 int	philo_killer(t_table *table, int i)
@@ -66,7 +53,7 @@ int	philo_killer(t_table *table, int i)
 		i = -1;
 		while (table->philos[++i])
 		{
-			pthread_mutex_lock(&table->stop_m);
+			sem_wait(table->stop_sem);
 			if (!table->stop)
 			{
 				unlock_and_gettime(table, &time_now, i);
@@ -78,8 +65,8 @@ int	philo_killer(t_table *table, int i)
 				}
 			}
 			else
-				return (pthread_mutex_unlock(&table->stop_m));
-			pthread_mutex_unlock(&table->philos[i]->last_m);
+				return (sem_post(table->stop_sem));
+			sem_post(table->philos[i]->last_meal_sem);
 		}
 	}
 }

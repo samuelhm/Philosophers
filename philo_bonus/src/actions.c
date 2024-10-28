@@ -6,59 +6,58 @@
 /*   By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 19:41:34 by shurtado          #+#    #+#             */
-/*   Updated: 2024/10/28 02:11:47 by shurtado         ###   ########.fr       */
+/*   Updated: 2024/10/28 12:12:54 by shurtado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static void	take_fork(pthread_mutex_t *fork, t_philo *philo)
+static void	take_forks(t_philo *philo)
 {
-	pthread_mutex_lock(fork);
-	pthread_mutex_lock(&philo->table->stop_m);
-	if (!philo->table->stop)
-		printf ("%lld %d taken a fork\n", current_timestamp() - \
-				philo->table->reset_time, philo->name);
-	pthread_mutex_unlock(&philo->table->stop_m);
+	int	i;
+
+	i = -1;
+	sem_wait(philo->table->take_forks_sem);
+	while (++i < 2)
+	{
+		sem_wait(philo->table->forks);
+		sem_wait(philo->table->stop_sem);
+		if (!philo->table->stop)
+			printf ("%lld %d taken a fork\n", current_timestamp() - \
+					philo->table->reset_time, philo->name);
+		sem_post(philo->table->stop_sem);
+	}
+	sem_post(philo->table->take_forks_sem);
 }
 
 void	philo_sleep(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->table->stop_m);
+	sem_wait(philo->table->stop_sem);
 	if (!philo->table->stop)
 		printf ("%lld %d is sleeping\n", current_timestamp() - \
 				philo->table->reset_time, philo->name);
-	pthread_mutex_unlock(&philo->table->stop_m);
+	sem_post(philo->table->stop_sem);
 	sleep_precise(philo->table->tto_sleep);
 }
 
 void	philo_eat(t_philo *philo)
 {
-	if (&philo->fork < philo->right_fork)
-	{
-		take_fork(&philo->fork, philo);
-		take_fork(philo->right_fork, philo);
-	}
-	else
-	{
-		take_fork(philo->right_fork, philo);
-		take_fork(&philo->fork, philo);
-	}
-	pthread_mutex_lock(&philo->table->stop_m);
+	take_forks(philo);
+	sem_wait(philo->table->stop_sem);
 	if (!philo->table->stop)
 		printf ("%lld %d is eating\n", current_timestamp() - \
 				philo->table->reset_time, philo->name);
-	pthread_mutex_unlock(&philo->table->stop_m);
+	sem_post(philo->table->stop_sem);
 	sleep_precise(philo->table->tto_eat);
-	pthread_mutex_unlock(&philo->fork);
-	pthread_mutex_unlock(philo->right_fork);
+	sem_post(philo->table->forks);
+	sem_post(philo->table->forks);
 }
 
 void	philo_think(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->table->stop_m);
+	sem_wait(philo->table->stop_sem);
 	if (!philo->table->stop)
 		printf ("%lld %d is thinking\n", current_timestamp() - \
 				philo->table->reset_time, philo->name);
-	pthread_mutex_unlock(&philo->table->stop_m);
+	sem_post(philo->table->stop_sem);
 }
