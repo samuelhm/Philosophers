@@ -6,7 +6,7 @@
 /*   By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 13:46:41 by shurtado          #+#    #+#             */
-/*   Updated: 2024/10/26 15:23:56 by shurtado         ###   ########.fr       */
+/*   Updated: 2024/10/28 01:43:11 by shurtado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,10 @@ void	*routine(void *arg)
 	philo = (t_philo *) arg;
 	if (philo->right_fork == &philo->fork)
 		return (NULL);
+	pthread_mutex_lock(&philo->table->stop_m);
 	while (!philo->table->stop)
 	{
+		pthread_mutex_unlock(&philo->table->stop_m);
 		philo_eat(philo);
 		pthread_mutex_lock(&philo->last_m);
 		philo->meals++;
@@ -31,9 +33,11 @@ void	*routine(void *arg)
 		pthread_mutex_unlock(&philo->last_m);
 		philo_sleep(philo);
 		philo_think(philo);
+		pthread_mutex_lock(&philo->table->stop_m);
 		if (philo->meals == philo->table->each_eat)
 			break ;
 	}
+	pthread_mutex_unlock(&philo->table->stop_m);
 	return (NULL);
 }
 

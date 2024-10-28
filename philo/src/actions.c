@@ -6,11 +6,21 @@
 /*   By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 19:41:34 by shurtado          #+#    #+#             */
-/*   Updated: 2024/10/28 01:35:59 by shurtado         ###   ########.fr       */
+/*   Updated: 2024/10/28 01:58:14 by shurtado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+static void	take_fork(pthread_mutex_t *fork, t_philo *philo)
+{
+	pthread_mutex_lock(fork);
+	pthread_mutex_lock(&philo->table->stop_m);
+	if (!philo->table->stop)
+		printf ("%lld %d taken a fork\n", current_timestamp() - \
+				philo->table->reset_time, philo->name);
+	pthread_mutex_unlock(&philo->table->stop_m);
+}
 
 long long	current_timestamp(void)
 {
@@ -36,13 +46,13 @@ void	philo_eat(t_philo *philo)
 {
 	if (&philo->fork < philo->right_fork)
 	{
-		pthread_mutex_lock(&philo->fork);
-		pthread_mutex_lock(philo->right_fork);
+		take_fork(&philo->fork, philo);
+		take_fork(philo->right_fork, philo);
 	}
 	else
 	{
-		pthread_mutex_lock(philo->right_fork);
-		pthread_mutex_lock(&philo->fork);
+		take_fork(philo->right_fork, philo);
+		take_fork(&philo->fork, philo);
 	}
 	pthread_mutex_lock(&philo->table->stop_m);
 	if (!philo->table->stop)
