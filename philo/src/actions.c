@@ -6,7 +6,7 @@
 /*   By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 19:41:34 by shurtado          #+#    #+#             */
-/*   Updated: 2024/10/26 15:23:00 by shurtado         ###   ########.fr       */
+/*   Updated: 2024/10/28 01:35:59 by shurtado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	philo_sleep(t_philo *philo)
 		printf ("%lld %d is sleeping\n", current_timestamp() - \
 				philo->table->reset_time, philo->name);
 	pthread_mutex_unlock(&philo->table->stop_m);
-	usleep(philo->table->tto_sleep * 1000);
+	sleep_precise(philo->table->tto_sleep);
 }
 
 void	philo_eat(t_philo *philo)
@@ -49,7 +49,7 @@ void	philo_eat(t_philo *philo)
 		printf ("%lld %d is eating\n", current_timestamp() - \
 				philo->table->reset_time, philo->name);
 	pthread_mutex_unlock(&philo->table->stop_m);
-	usleep(philo->table->tto_eat * 1000);
+	sleep_precise(philo->table->tto_eat);
 	pthread_mutex_unlock(&philo->fork);
 	pthread_mutex_unlock(philo->right_fork);
 }

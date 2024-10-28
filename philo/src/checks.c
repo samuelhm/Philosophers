@@ -6,7 +6,7 @@
 /*   By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 16:15:26 by shurtado          #+#    #+#             */
-/*   Updated: 2024/10/24 20:30:25 by shurtado         ###   ########.fr       */
+/*   Updated: 2024/10/28 01:34:37 by shurtado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,4 +86,18 @@ bool	check_init_args(int argc, char **argv, t_table *table)
 		return (false);
 	init_philosophers(table, num);
 	return (true);
+}
+
+void	sleep_precise(long miliseconds)
+{
+	long long	start_time;
+	long long	elapsed;
+
+	start_time = current_timestamp();
+	elapsed = current_timestamp() - start_time;
+	while (miliseconds > elapsed)
+	{
+		usleep(200);
+		elapsed = current_timestamp() - start_time;
+	}
 }
