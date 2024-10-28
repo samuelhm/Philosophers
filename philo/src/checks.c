@@ -6,7 +6,7 @@
 /*   By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 16:15:26 by shurtado          #+#    #+#             */
-/*   Updated: 2024/10/28 01:34:37 by shurtado         ###   ########.fr       */
+/*   Updated: 2024/10/28 02:33:52 by shurtado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,31 @@ static void	init_philosophers(t_table *table, int count)
 	set_forks(table);
 }
 
+static bool	check_digits(int argc, char **argv)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = -1;
+	while (++i < argc -1)
+	{
+		j = 0;
+		while (argv[i][++j])
+		{
+			if (!ft_isdigit(argv[i][j]))
+				return (false);
+		}
+	}
+	return (true);
+}
+
 bool	check_init_args(int argc, char **argv, t_table *table)
 {
 	int	num;
 
+	if (!check_digits(argc, argv))
+		return (false);
 	if (argc < 5 || argc > 6)
 		return (false);
 	if (argc == 6)
@@ -86,18 +107,4 @@ bool	check_init_args(int argc, char **argv, t_table *table)
 		return (false);
 	init_philosophers(table, num);
 	return (true);
-}
-
-void	sleep_precise(long miliseconds)
-{
-	long long	start_time;
-	long long	elapsed;
-
-	start_time = current_timestamp();
-	elapsed = current_timestamp() - start_time;
-	while (miliseconds > elapsed)
-	{
-		usleep(200);
-		elapsed = current_timestamp() - start_time;
-	}
 }

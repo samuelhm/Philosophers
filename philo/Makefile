@@ -6,24 +6,24 @@
 #    By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/11 13:53:02 by linyao            #+#    #+#              #
-#    Updated: 2024/10/28 01:57:42 by shurtado         ###   ########.fr        #
+#    Updated: 2024/10/28 02:31:30 by shurtado         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 #Config
 CC = gcc
 TARGET = philo
-CFLAGS = -Wall -pthread -Wextra -Werror -I$(INC_DIR)
+CFLAGS = -Wall -Wextra -Werror -I$(INC_DIR)
 
 # Debug
-CFLAGS += -g -O1 #-fsanitize=thread 
+CFLAGS += -g -O1 #-fsanitize=thread
 # Directory
 SRC_DIR = src
 OBJ_DIR = obj
 INC_DIR = inc
 
 # Source + obj
-SRCS_FILES = philo.c checks.c actions.c philo_utils.c
+SRCS_FILES = philo.c checks.c actions.c philo_utils.c time_utils.c
 SRCS = $(addprefix $(SRC_DIR)/,$(SRCS_FILES))
 
 OBJS = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS))

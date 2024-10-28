@@ -6,7 +6,7 @@
 /*   By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 19:41:34 by shurtado          #+#    #+#             */
-/*   Updated: 2024/10/28 01:58:14 by shurtado         ###   ########.fr       */
+/*   Updated: 2024/10/28 02:11:47 by shurtado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,6 @@ static void	take_fork(pthread_mutex_t *fork, t_philo *philo)
 		printf ("%lld %d taken a fork\n", current_timestamp() - \
 				philo->table->reset_time, philo->name);
 	pthread_mutex_unlock(&philo->table->stop_m);
-}
-
-long long	current_timestamp(void)
-{
-	struct timeval	te;
-	long long		milliseconds;
-
-	gettimeofday(&te, NULL);
-	milliseconds = te.tv_sec * 1000LL + te.tv_usec / 1000;
-	return (milliseconds);
 }
 
 void	philo_sleep(t_philo *philo)
