@@ -6,7 +6,7 @@
 /*   By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 16:15:26 by shurtado          #+#    #+#             */
-/*   Updated: 2024/10/28 02:33:52 by shurtado         ###   ########.fr       */
+/*   Updated: 2024/10/30 14:25:58 by shurtado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ static void	init_philosophers(t_table *table, int count)
 		table->philos[i]->name = i;
 		table->philos[i]->meals = 0;
 		table->philos[i]->last_meal = -1;
+		table->philos[i]->is_eating = false;
 	}
 	set_forks(table);
 }

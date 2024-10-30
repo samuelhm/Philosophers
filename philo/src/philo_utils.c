@@ -6,7 +6,7 @@
 /*   By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 15:34:14 by shurtado          #+#    #+#             */
-/*   Updated: 2024/10/28 01:34:59 by shurtado         ###   ########.fr       */
+/*   Updated: 2024/10/30 14:28:24 by shurtado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,10 @@ int	philo_killer(t_table *table, int i)
 				if (time_now - table->philos[i]->last_meal > \
 					table->tto_die)
 				{
-					kill(table, i);
+					pthread_mutex_lock(&table->philos[i]->eating_m);
+					if (!table->philos[i]->is_eating)
+						kill(table, i);
+					pthread_mutex_unlock(&table->philos[i]->eating_m);
 					break ;
 				}
 			}

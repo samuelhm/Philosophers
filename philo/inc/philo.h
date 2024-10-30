@@ -6,7 +6,7 @@
 /*   By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 13:47:41 by shurtado          #+#    #+#             */
-/*   Updated: 2024/10/28 02:01:23 by shurtado         ###   ########.fr       */
+/*   Updated: 2024/10/30 14:28:57 by shurtado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ typedef struct s_philo
 	pthread_t		philo_thrd;
 	pthread_mutex_t	*right_fork;
 	pthread_mutex_t	fork;
+	pthread_mutex_t	eating_m;
+	bool			is_eating;
 	int				name;
 	int				meals;
 	pthread_mutex_t	last_m;
