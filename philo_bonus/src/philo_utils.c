@@ -6,7 +6,7 @@
 /*   By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 15:34:14 by shurtado          #+#    #+#             */
-/*   Updated: 2024/10/31 18:20:58 by shurtado         ###   ########.fr       */
+/*   Updated: 2024/10/31 19:53:56 by shurtado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,17 +57,12 @@ int	philo_killer(t_table *table, int i)
 			if (!table->stop)
 			{
 				unlock_and_gettime(table, &time_now, i);
-				if (time_now - table->philos[i]->last_meal > \
-					table->tto_die)
+				if (time_now - table->philos[i]->last_meal > table->tto_die)
 				{
 					sem_wait(table->philos[i]->eating_sem);
 					if (!table->philos[i]->is_eating)
-					{
-						sem_post(table->philos[i]->eating_sem);
 						kill(table, i);
-					}
-					else
-						sem_post(table->philos[i]->eating_sem);
+					sem_post(table->philos[i]->eating_sem);
 					break ;
 				}
 			}

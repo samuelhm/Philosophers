@@ -6,7 +6,7 @@
 /*   By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 13:47:41 by shurtado          #+#    #+#             */
-/*   Updated: 2024/10/31 18:24:55 by shurtado         ###   ########.fr       */
+/*   Updated: 2024/10/31 19:53:11 by shurtado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include <sys/time.h>
 # include <stdbool.h>
 # include <semaphore.h>
-#include <fcntl.h>
+# include <fcntl.h>
 
 typedef struct s_philo	t_philo;
 
