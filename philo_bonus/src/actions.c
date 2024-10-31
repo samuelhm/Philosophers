@@ -6,7 +6,7 @@
 /*   By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 19:41:34 by shurtado          #+#    #+#             */
-/*   Updated: 2024/10/28 12:12:54 by shurtado         ###   ########.fr       */
+/*   Updated: 2024/10/31 18:16:34 by shurtado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,9 @@ void	philo_eat(t_philo *philo)
 		printf ("%lld %d is eating\n", current_timestamp() - \
 				philo->table->reset_time, philo->name);
 	sem_post(philo->table->stop_sem);
+	sem_wait(philo->eating_sem);
+	philo->is_eating = true;
+	sem_post(philo->eating_sem);
 	sleep_precise(philo->table->tto_eat);
 	sem_post(philo->table->forks);
 	sem_post(philo->table->forks);

@@ -6,12 +6,11 @@
 /*   By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 16:15:26 by shurtado          #+#    #+#             */
-/*   Updated: 2024/10/28 12:00:54 by shurtado         ###   ########.fr       */
+/*   Updated: 2024/10/31 18:04:00 by shurtado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-#include <fcntl.h>
 
 static int	ft_isdigit(int c)
 {
@@ -57,8 +56,7 @@ static void	init_philosophers(t_table *table, int count)
 	while (++i < count)
 	{
 		table->philos[i] = malloc(sizeof(t_philo));
-		table->philos[i]->last_meal_sem = sem_open("/last_meal", \
-												O_CREAT, 0644, 1);
+		assign_sem(table, i);
 		table->philos[i]->table = table;
 		table->philos[i]->name = i;
 		table->philos[i]->meals = 0;
