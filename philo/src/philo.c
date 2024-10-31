@@ -6,7 +6,7 @@
 /*   By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 13:46:41 by shurtado          #+#    #+#             */
-/*   Updated: 2024/10/28 01:43:11 by shurtado         ###   ########.fr       */
+/*   Updated: 2024/10/30 14:35:05 by shurtado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ static void	free_table(t_table *table)
 	{
 		pthread_mutex_destroy(&table->philos[i]->fork);
 		pthread_mutex_destroy(&table->philos[i]->last_m);
+		pthread_mutex_destroy(&table->philos[i]->eating_m);
+
 		free(table->philos[i]);
 	}
 	pthread_mutex_destroy(&table->stop_m);

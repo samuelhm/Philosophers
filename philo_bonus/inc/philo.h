@@ -6,7 +6,7 @@
 /*   By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 13:47:41 by shurtado          #+#    #+#             */
-/*   Updated: 2024/10/28 11:33:15 by shurtado         ###   ########.fr       */
+/*   Updated: 2024/10/30 14:34:32 by shurtado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ typedef struct s_philo
 	int				name;
 	int				meals;
 	sem_t			*last_meal_sem;
+	sem_t			*eating_sem;
+	bool			is_eating;
 	long long		last_meal;
 }	t_philo;
 
