@@ -6,7 +6,7 @@
 /*   By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 16:15:26 by shurtado          #+#    #+#             */
-/*   Updated: 2024/10/31 18:04:00 by shurtado         ###   ########.fr       */
+/*   Updated: 2024/11/02 17:38:00 by shurtado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,9 @@ static void	init_philosophers(t_table *table, int count)
 	while (++i < count)
 	{
 		table->philos[i] = malloc(sizeof(t_philo));
-		assign_sem(table, i);
+		assign_sem(&table, i);
 		table->philos[i]->table = table;
-		table->philos[i]->name = i;
+		table->philos[i]->name = i + 1;
 		table->philos[i]->meals = 0;
 		table->philos[i]->last_meal = -1;
 	}

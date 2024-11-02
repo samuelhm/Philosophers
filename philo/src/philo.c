@@ -6,7 +6,7 @@
 /*   By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 13:46:41 by shurtado          #+#    #+#             */
-/*   Updated: 2024/10/31 19:52:10 by shurtado         ###   ########.fr       */
+/*   Updated: 2024/11/02 16:49:48 by shurtado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ int	main(int argc, char *argv[])
 		return (1);
 	}
 	start_threads(&table);
+	usleep(500);
 	philo_killer(&table, -1);
 	free_table(&table);
 	return (0);

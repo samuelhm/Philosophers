@@ -6,7 +6,7 @@
 /*   By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 13:47:41 by shurtado          #+#    #+#             */
-/*   Updated: 2024/10/31 19:53:11 by shurtado         ###   ########.fr       */
+/*   Updated: 2024/11/02 17:38:16 by shurtado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void		*routine(void *arg);
 void		start_threads(t_table *table);
 long long	current_timestamp(void);
 int			philo_killer(t_table *table, int i);
-void		assign_sem(t_table *table, int i);
+void		assign_sem(t_table **table, int i);
 void		unlink_philo_sem(int i);
 
 //Philo Actions
