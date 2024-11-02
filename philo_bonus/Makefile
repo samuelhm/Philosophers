@@ -5,10 +5,11 @@
 #                                                     +:+ +:+         +:+      #
 #    By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/09/11 13:53:02 by linyao            #+#    #+#              #
-#    Updated: 2024/10/31 18:30:56 by shurtado         ###   ########.fr        #
+#    Created: 2024/11/02 19:03:02 by shurtado          #+#    #+#              #
+#    Updated: 2024/11/02 19:03:35 by shurtado         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
+
 
 #Config
 CC = gcc

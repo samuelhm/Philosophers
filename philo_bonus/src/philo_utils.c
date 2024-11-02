@@ -6,7 +6,7 @@
 /*   By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 15:34:14 by shurtado          #+#    #+#             */
-/*   Updated: 2024/11/02 18:52:58 by shurtado         ###   ########.fr       */
+/*   Updated: 2024/11/02 19:29:27 by shurtado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static void	kill(t_table *table, int i)
 {
 	if (table->each_eat != table->philos[i]->meals)
 		printf("%lld %d died\n", current_timestamp() \
-				- table->reset_time, i);
+				- table->reset_time, i + 1);
 	sem_wait(table->stop_sem);
 	table->stop = true;
 	sem_post(table->stop_sem);

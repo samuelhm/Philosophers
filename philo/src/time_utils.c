@@ -6,7 +6,7 @@
 /*   By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 02:06:35 by shurtado          #+#    #+#             */
-/*   Updated: 2024/10/28 02:07:05 by shurtado         ###   ########.fr       */
+/*   Updated: 2024/11/02 19:34:58 by shurtado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,4 +34,14 @@ void	sleep_precise(long miliseconds)
 		usleep(200);
 		elapsed = current_timestamp() - start_time;
 	}
+}
+
+void	kill(t_table *table, int i)
+{
+	if (table->each_eat != table->philos[i]->meals)
+		printf("%lld %d died\n", current_timestamp() \
+				- table->reset_time, i + 1);
+	pthread_mutex_lock(&table->stop_m);
+	table->stop = true;
+	pthread_mutex_unlock(&table->stop_m);
 }
