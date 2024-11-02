@@ -38,10 +38,12 @@ void	sleep_precise(long miliseconds)
 
 void	kill(t_table *table, int i)
 {
-	if (table->each_eat != table->philos[i]->meals)
-		printf("%lld %d died\n", current_timestamp() \
-				- table->reset_time, i + 1);
+	long long	now;
+
 	pthread_mutex_lock(&table->stop_m);
 	table->stop = true;
 	pthread_mutex_unlock(&table->stop_m);
+	now = current_timestamp();
+	if (table->each_eat != table->philos[i]->meals)
+		printf("%lld %d died\n", now - table->reset_time, i + 1);
 }

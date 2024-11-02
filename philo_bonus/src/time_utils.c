@@ -45,6 +45,8 @@ void	assign_sem(t_table **table, int i)
 	memcpy(eaiting_s_name, "/eating_semx", 13);
 	last_s_name[10] = i + '0';
 	eaiting_s_name[11] = i + '0';
+	sem_unlink(last_s_name);
+	sem_unlink(eaiting_s_name);
 	(*table)->philos[i]->last_meal_sem = sem_open(last_s_name, \
 											O_CREAT, 0644, 1);
 	(*table)->philos[i]->eating_sem = sem_open(eaiting_s_name, \

@@ -31,6 +31,9 @@ void	*routine(void *arg)
 		philo->meals++;
 		philo->last_meal = current_timestamp();
 		pthread_mutex_unlock(&philo->last_m);
+		pthread_mutex_lock(&philo->eating_m);
+		philo->is_eating = false;
+		pthread_mutex_unlock(&philo->eating_m);
 		philo_sleep(philo);
 		philo_think(philo);
 		pthread_mutex_lock(&philo->table->stop_m);

@@ -28,12 +28,12 @@ void	start_threads(t_table *table)
 
 static void	kill(t_table *table, int i)
 {
-	if (table->each_eat != table->philos[i]->meals)
-		printf("%lld %d died\n", current_timestamp() \
-				- table->reset_time, i + 1);
 	sem_wait(table->stop_sem);
 	table->stop = true;
 	sem_post(table->stop_sem);
+	if (table->each_eat != table->philos[i]->meals)
+		printf("%lld %d died\n", current_timestamp() \
+				- table->reset_time, i + 1);
 }
 
 static void	unlock_and_gettime(t_table *table, long long *time_now, int i)

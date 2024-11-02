@@ -53,9 +53,6 @@ void	philo_eat(t_philo *philo)
 				philo->table->reset_time, philo->name);
 	pthread_mutex_unlock(&philo->table->stop_m);
 	sleep_precise(philo->table->tto_eat);
-	pthread_mutex_lock(&philo->eating_m);
-	philo->is_eating = false;
-	pthread_mutex_unlock(&philo->eating_m);
 	pthread_mutex_unlock(&philo->fork);
 	pthread_mutex_unlock(philo->right_fork);
 }

@@ -43,14 +43,14 @@ void	philo_sleep(t_philo *philo)
 void	philo_eat(t_philo *philo)
 {
 	take_forks(philo);
+	sem_wait(philo->eating_sem);
+	philo->is_eating = true;
+	sem_post(philo->eating_sem);
 	sem_wait(philo->table->stop_sem);
 	if (!philo->table->stop)
 		printf ("%lld %d is eating\n", current_timestamp() - \
 				philo->table->reset_time, philo->name);
 	sem_post(philo->table->stop_sem);
-	sem_wait(philo->eating_sem);
-	philo->is_eating = true;
-	sem_post(philo->eating_sem);
 	sleep_precise(philo->table->tto_eat);
 	sem_post(philo->table->forks);
 	sem_post(philo->table->forks);
