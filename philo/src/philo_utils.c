@@ -6,7 +6,7 @@
 /*   By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 15:34:14 by shurtado          #+#    #+#             */
-/*   Updated: 2024/11/02 19:34:54 by shurtado         ###   ########.fr       */
+/*   Updated: 2024/11/03 15:03:55 by shurtado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ void	start_threads(t_table *table)
 	i = -1;
 	while (table->philos[++i])
 	{
+		table->philos[i]->last_meal = current_timestamp();
 		pthread_create(&table->philos[i]->philo_thrd, NULL, \
 						routine, table->philos[i]);
-		table->philos[i]->last_meal = current_timestamp();
 	}
 }
 

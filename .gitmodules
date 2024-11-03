@@ -1,0 +1,3 @@
+[submodule "philo/test"]
+	path = philo/test
+	url = git@github.com:MichelleJiam/LazyPhilosophersTester.git
