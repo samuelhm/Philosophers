@@ -6,7 +6,7 @@
 /*   By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 13:46:41 by shurtado          #+#    #+#             */
-/*   Updated: 2024/11/03 14:37:28 by shurtado         ###   ########.fr       */
+/*   Updated: 2024/11/03 14:42:40 by shurtado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ int	main(int argc, char *argv[])
 	init_table(&table);
 	if (!check_init_args(argc, argv, &table))
 	{
-		printf("Argumentos invalidos");
+		printf("Argumentos invalidos\n");
 		if (table.philos)
 			free(table.philos);
 		return (1);
