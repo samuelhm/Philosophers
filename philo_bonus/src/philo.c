@@ -6,7 +6,7 @@
 /*   By: shurtado <shurtado@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 13:46:41 by shurtado          #+#    #+#             */
-/*   Updated: 2024/10/31 18:22:45 by shurtado         ###   ########.fr       */
+/*   Updated: 2024/11/03 14:37:28 by shurtado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,6 @@ void	*routine(void *arg)
 	{
 		sem_post(philo->table->stop_sem);
 		philo_eat(philo);
-		sem_wait(philo->last_meal_sem);
-		philo->meals++;
-		philo->last_meal = current_timestamp();
-		sem_post(philo->last_meal_sem);
 		sem_wait(philo->eating_sem);
 		philo->is_eating = false;
 		sem_post(philo->eating_sem);
